@@ -1,0 +1,46 @@
+Kunal Signup
+
+{
+    "name":"Kunal Mehra",
+    "email":"k@gmail.com",
+    "password":"kunal@143"
+}
+---------------------
+Kunal login
+{
+    "email":"k@gmail.com",
+    "password":"kunal@143"
+}
+ Vanshika   
+{
+    "email":"v@gmail.com",
+    "password":"v123"
+}
+
+{
+    "name": "Ankush",
+    "email": "an@gmail.com",
+    "password": "a123",
+    "posts": [],
+    "follow": [],
+    "followed": []
+}
+
+POST-----------------
+{
+    "user": "6450b6743c6f1b464490396a",
+    "text": "Testing A Post",
+    "image": "sdfasdfasdf",
+    "likes": [],
+    "comments": []
+}
+comment-----------------------\
+{
+    text:"Nice image"
+}
+
+
+
+
+
+http://localhost:4500/users/6450b6743c6f1b464490396a/follow/6450c3cf8b1cdde6b53584d9
