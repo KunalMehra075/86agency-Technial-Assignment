@@ -64,7 +64,7 @@
 
 # Detailed Explanation of all the routes:-
 
-### POST /api/register
+### POST /api/signup
 
 - This endpoint allows users to register. It Hashes the password while storing on Database.
 - It requires User Details in a form of json object in request.body
