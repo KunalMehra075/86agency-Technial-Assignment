@@ -48,3 +48,6 @@ app.listen(process.env.PORT, async () => {
     }
     console.log(`Server is Rocking on port ${process.env.PORT}`);
 });
+
+
+// Please checkout api.rest file to test all the routes!

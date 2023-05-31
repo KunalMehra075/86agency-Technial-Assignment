@@ -100,7 +100,7 @@ PostRouter.post("/like/:id", Authentication, async (req, res) => {
             return res.status(404).json({ Message: "Post not found" });
         }
         if (Post.likes.includes(userID)) {
-            return res.status(201).json({ Message: "Already liked this post", NewLike });
+            return res.status(201).json({ Message: "Already liked this post" });
         }
         Post.likes.push(userID)
         let NewLike = await PostModel.findByIdAndUpdate({ _id: id }, Post)
@@ -114,9 +114,12 @@ PostRouter.post("/like/:id", Authentication, async (req, res) => {
 PostRouter.post("/comment/:id", Authentication, async (req, res) => {
     let id = req.params.id
     let comment = req.body
-    req.body.user = req.headers.userID
+    comment.userID = req.headers.userID
     try {
         let Post = await PostModel.findById({ _id: id })
+        if (!Post) {
+            return res.status(404).json({ Message: "Post not found" });
+        }
         Post.comments.push(comment)
         let NewComment = await PostModel.findByIdAndUpdate({ _id: id }, Post)
         res.status(200).json({ Message: "Commented on a Post", NewComment });

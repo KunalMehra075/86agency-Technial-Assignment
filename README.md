@@ -1,5 +1,7 @@
 # 86agency-Technial-Assignment
 
+Deployed Link : https://eight6agency-assignment.onrender.com
+
 # A Simple Social Media Application :-
 
 - This is a Social Media App which allows users to Login & Signup And make a Post.
@@ -137,9 +139,9 @@
 
 ```
 {
-  user: { type: ObjectId, ref: 'User' },
-  text: String,
-  image: String,
+  userID: { type: ObjectId, ref: 'User' },
+  Title:String,
+  Content:String
   createdAt: Date,
   likes: [{ type: ObjectId, ref: 'User' }],
   comments: [{
