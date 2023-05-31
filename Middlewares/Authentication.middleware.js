@@ -8,7 +8,6 @@ const Authentication = (req, res, next) => {
     }
     jwt.verify(token, process.env.key, (err, decoded) => {
         if (decoded) {
-            console.log(decoded.userID)
             req.headers.userID = decoded.userID
             next()
         } else {

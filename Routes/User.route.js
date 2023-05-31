@@ -29,15 +29,27 @@ UserRouter.get("/follow/:id", async (req, res) => {
         res.status(500).json({ Error: err })
     }
 });
+
 // ! FOLLOW A PERSON
 UserRouter.post("/follow/:id", Authentication, async (req, res) => {
     let userId = req.params.id
     let selfId = req.headers.userID
     try {
-        const User = await UserModel.findById({ _id: userId });
-        User.followed.push(selfId)
-        await UserModel.findByIdAndUpdate({ _id: userId }, User)
-        res.status(200).json({ Message: `Started following user with with ID: ${userId}`, User });
+        const User = await UserModel.findById({ _id: selfId });
+        let AlreadyDone = false
+
+        User.followed.forEach(elem => {
+            if (elem == userId) {
+                AlreadyDone = true
+            }
+        });
+        if (AlreadyDone) {
+            return res.status(401).json({ Message: `Already following the User with with ID: ${userId}`, User });
+        } else {
+            User.followed.push(userId)
+            await UserModel.findByIdAndUpdate({ _id: selfId }, User)
+            res.status(200).json({ Message: `Started following user with with ID: ${userId}`, Your_Data: User });
+        }
     } catch (err) {
         console.log(err);
         res.status(500).json({ Error: err })
@@ -49,10 +61,10 @@ UserRouter.post("/unfollow/:id", Authentication, async (req, res) => {
     let selfId = req.headers.userID
     try {
         const User = await UserModel.findById({ _id: selfId });
-        let temp = User.followed.filter(item => item.id != userId)
+        let temp = User.followed.filter(item => item != userId)
         User.followed = temp
-        await UserModel.findByIdAndUpdate({ _id: userId }, User)
-        res.status(200).json({ Message: `Unfollowed the user with ID : ${userId}`, User });
+        await UserModel.findByIdAndUpdate({ _id: selfId }, User)
+        res.status(200).json({ Message: `Not Following the user with ID : ${userId}`, User });
     } catch (err) {
         console.log(err);
         res.status(500).json({ Error: err })

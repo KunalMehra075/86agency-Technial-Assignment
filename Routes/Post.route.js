@@ -32,7 +32,7 @@ PostRouter.get("/:id", async (req, res) => {
 PostRouter.post("/", Authentication, async (req, res) => {
     let post = req.body
     let AuthID = req.headers.userID
-    post.user = AuthID
+    post.userID = AuthID
     try {
         let Post = await PostModel.create(post)
         let User = await UserModel.findById({ _id: AuthID })
@@ -51,9 +51,9 @@ PostRouter.put("/:id", Authentication, async (req, res) => {
     let payload = req.body
     try {
         let Post = await PostModel.findById({ _id: PostID })
-        let Creator = Post.user
+        let Creator = Post.userID
         if (Creator != AuthID) {
-            return res.status(401).json({ Message: "Un-authorized, Cannot update Other people Posts" });
+            return res.status(401).json({ Message: "Un-authorized, Cannot update Other people Posts", YourID: AuthID, Creator });
         } else {
             let Updated = await PostModel.findByIdAndUpdate({ _id: PostID }, payload)
             res.status(200).json({ Message: "Post Updated Successfully", Updated });
@@ -72,10 +72,10 @@ PostRouter.delete("/:id", Authentication, async (req, res) => {
         if (!Post) {
             return res.status(404).json({ Message: "No Post found with id:" + " " + PostID });
         }
-        let CreatorID = Post.user
+        let CreatorID = Post.userID
         if (CreatorID != AuthID) {
 
-            return res.status(401).json({ Message: "Un-authorized, Cannot Delete Other people Posts" });
+            return res.status(401).json({ Message: "Un-authorized, Cannot Delete Other people Posts", CreatorID, AuthID });
         } else {
             let Creator = await UserModel.findById({ _id: AuthID })
             let CreatorPosts = Creator.posts
@@ -99,9 +99,12 @@ PostRouter.post("/like/:id", Authentication, async (req, res) => {
         if (!Post) {
             return res.status(404).json({ Message: "Post not found" });
         }
+        if (Post.likes.includes(userID)) {
+            return res.status(201).json({ Message: "Already liked this post", NewLike });
+        }
         Post.likes.push(userID)
         let NewLike = await PostModel.findByIdAndUpdate({ _id: id }, Post)
-        res.status(200).json({ Message: "Posted A new Like", NewLike });
+        res.status(200).json({ Message: "Liked the Post", NewLike });
     } catch (err) {
         console.log(err);
         res.status(500).json({ Error: err })
